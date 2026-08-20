@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radha Rani Store</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,Arial,sans-serif;background:#f6f7fb;color:#171923}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #e8e9ef}
+.nav{max-width:1180px;margin:auto;padding:15px 18px;display:flex;align-items:center;gap:18px}
+.logo{font-size:22px;font-weight:800;white-space:nowrap}.logo span{color:#e63967}
+.search{flex:1;display:flex;background:#f1f2f6;border-radius:12px;padding:0 13px}
+.search input{border:0;background:transparent;outline:0;width:100%;padding:12px;font-size:14px}
+.actions{display:flex;gap:8px}.icon{border:0;background:#f1f2f6;border-radius:11px;padding:11px;cursor:pointer}
+.hero{max-width:1180px;margin:24px auto;padding:0 18px}
+.banner{border-radius:24px;padding:42px 38px;min-height:300px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#171923,#3a244f);color:white;overflow:hidden}
+.banner h1{font-size:clamp(32px,5vw,58px);line-height:1.03;max-width:600px}
+.banner p{margin:15px 0 22px;color:#ddd;max-width:500px}
+.btn{border:0;border-radius:12px;padding:12px 18px;background:#e63967;color:#fff;font-weight:700;cursor:pointer}
+.hero-card{font-size:95px;transform:rotate(-8deg);filter:drop-shadow(0 20px 20px #0006)}
+section{max-width:1180px;margin:30px auto;padding:0 18px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.section-head h2{font-size:24px}
+.categories{display:flex;gap:10px;overflow:auto;padding-bottom:5px}
+.cat{border:1px solid #ddd;background:#fff;padding:10px 16px;border-radius:999px;white-space:nowrap;cursor:pointer}
+.cat.active{background:#171923;color:#fff;border-color:#171923}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.product{background:#fff;border:1px solid #e7e8ee;border-radius:18px;padding:12px;position:relative;transition:.2s}
+.product:hover{transform:translateY(-3px);box-shadow:0 10px 30px #0000000c}
+.pic{height:180px;border-radius:14px;background:#f3f4f7;display:flex;align-items:center;justify-content:center;font-size:72px;cursor:pointer}
+.wish{position:absolute;right:20px;top:20px;border:0;background:#fff;border-radius:50%;width:34px;height:34px;cursor:pointer}
+.product h3{font-size:16px;margin:12px 3px 7px}.stars{font-size:12px;color:#f59e0b}.price{font-weight:800;font-size:18px;margin-top:6px}.old{text-decoration:line-through;color:#999;font-size:13px;margin-left:6px;font-weight:400}
+.add{width:100%;margin-top:10px;background:#171923}
+.empty{padding:30px;text-align:center;color:#777;grid-column:1/-1}
+footer{margin-top:45px;background:#171923;color:#ddd;padding:35px 18px;text-align:center}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;align-items:center;justify-content:center;padding:18px}
+.modal.show{display:flex}.box{background:#fff;border-radius:20px;max-width:520px;width:100%;padding:22px;position:relative}
+.close{position:absolute;right:16px;top:12px;border:0;background:#eee;border-radius:50%;width:32px;height:32px;cursor:pointer}
+.cart-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding:12px 0}.cart-row .mini{font-size:35px}.qty{margin-left:auto}
+.total{display:flex;justify-content:space-between;font-weight:800;margin:18px 0}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.hero-card{font-size:65px}.nav{flex-wrap:wrap}.search{order:3;flex-basis:100%}}
+@media(max-width:500px){.banner{padding:28px 22px;min-height:260px}.hero-card{display:none}.grid{gap:10px}.pic{height:145px;font-size:55px}.product{padding:9px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="logo">Radha Rani <span>Store</span></div>
+    <div class="search">🔎<input id="search" placeholder="Search electronics & accessories..."></div>
+    <div class="actions">
+      <button class="icon" onclick="showCart()">🛒 <b id="count">0</b></button>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="banner">
+    <div>
+      <div style="font-weight:700;color:#ff8aaa">RADHA RANI STORE</div>
+      <h1>Tech you love.<br>Prices you'll love more.</h1>
+      <p>Shop headphones, earbuds, chargers, smartwatches and everyday tech accessories.</p>
+      <button class="btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+    </div>
+    <div class="hero-card">🎧</div>
+  </div>
+</div>
+
+<section>
+  <div class="section-head"><h2>Shop by Category</h2></div>
+  <div class="categories" id="cats"></div>
+</section>
+
+<section id="products">
+  <div class="section-head"><h2>Popular Products</h2><span id="result"></span></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<footer>
+  <h2>Radha Rani Store</h2>
+  <p style="margin-top:8px">Electronics • Accessories • Everyday Tech</p>
+  <p style="margin-top:18px;font-size:13px;color:#aaa">© 2026 Radha Rani Store. Demo storefront.</p>
+</footer>
+
+<div class="modal" id="modal">
+ <div class="box">
+  <button class="close" onclick="closeModal()">×</button>
+  <h2 id="modalTitle">Your Cart</h2>
+  <div id="cart"></div>
+ </div>
+</div>
+
+<script>
+const products=[
+{id:1,name:"Wireless Bluetooth Headphones",cat:"Audio",price:1299,old:1799,emoji:"🎧",rating:"4.6"},
+{id:2,name:"TWS Earbuds Pro",cat:"Audio",price:899,old:1299,emoji:"🎵",rating:"4.5"},
+{id:3,name:"Smart Watch Series",cat:"Wearables",price:1599,old:2299,emoji:"⌚",rating:"4.4"},
+{id:4,name:"65W Fast Charger",cat:"Chargers",price:799,old:1099,emoji:"🔌",rating:"4.7"},
+{id:5,name:"Braided Type-C Cable",cat:"Cables",price:299,old:499,emoji:"🔗",rating:"4.5"},
+{id:6,name:"Wireless Gaming Mouse",cat:"Gaming",price:699,old:999,emoji:"🖱️",rating:"4.3"},
+{id:7,name:"Mini Bluetooth Speaker",cat:"Audio",price:749,old:999,emoji:"🔊",rating:"4.4"},
+{id:8,name:"Power Bank 10000mAh",cat:"Power",price:999,old:1399,emoji:"🔋",rating:"4.6"}
+];
+let category="All",cart=[];
+const grid=document.getElementById("grid"), cats=document.getElementById("cats"), search=document.getElementById("search");
+const categories=["All",...new Set(products.map(p=>p.cat))];
+cats.innerHTML=categories.map(c=>`<button class="cat ${c==="All"?"active":""}" onclick="setCat('${c}')">${c}</button>`).join("");
+function setCat(c){category=c;document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.textContent===c));render()}
+function render(){
+ const q=search.value.toLowerCase();
+ const list=products.filter(p=>(category==="All"||p.cat===category)&&p.name.toLowerCase().includes(q));
+ document.getElementById("result").textContent=list.length+" items";
+ grid.innerHTML=list.length?list.map(p=>`
+ <article class="product">
+  <button class="wish" onclick="wish(this)">♡</button>
+  <div class="pic" onclick="details(${p.id})">${p.emoji}</div>
+  <div class="stars">★ ${p.rating}</div>
+  <h3>${p.name}</h3>
+  <div class="price">₹${p.price.toLocaleString("en-IN")} <span class="old">₹${p.old.toLocaleString("en-IN")}</span></div>
+  <button class="btn add" onclick="add(${p.id})">Add to Cart</button>
+ </article>`).join(""):`<div class="empty">No products found.</div>`;
+}
+function add(id){cart.push(id);updateCount();alert("Added to cart!")}
+function updateCount(){document.getElementById("count").textContent=cart.length}
+function wish(b){b.textContent=b.textContent==="♡"?"♥":"♡"}
+function details(id){const p=products.find(x=>x.id===id);document.getElementById("modalTitle").textContent=p.name;document.getElementById("cart").innerHTML=`<div style="font-size:90px;text-align:center">${p.emoji}</div><p>${p.cat} • ★ ${p.rating}</p><h2 style="margin-top:8px">₹${p.price.toLocaleString("en-IN")}</h2><button class="btn" style="width:100%;margin-top:16px" onclick="add(${p.id});closeModal()">Add to Cart</button>`;document.getElementById("modal").classList.add("show")}
+function showCart(){
+ document.getElementById("modalTitle").textContent="Your Cart";
+ const rows=cart.map(id=>products.find(p=>p.id===id));
+ document.getElementById("cart").innerHTML=rows.length?rows.map(p=>`<div class="cart-row"><span class="mini">${p.emoji}</span><div>${p.name}<br><b>₹${p.price.toLocaleString("en-IN")}</b></div></div>`).join("")+`<div class="total"><span>Total</span><span>₹${rows.reduce((s,p)=>s+p.price,0).toLocaleString("en-IN")}</span></div><button class="btn" style="width:100%" onclick="alert('Checkout demo — connect a payment gateway to accept real orders.')">Checkout</button>`:"<p style='padding:30px;text-align:center'>Your cart is empty.</p>";
+ document.getElementById("modal").classList.add("show")
+}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+search.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
